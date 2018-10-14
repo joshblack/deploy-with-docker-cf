@@ -24,6 +24,9 @@ jobs:
                   -o 'joshblack@us.ibm.com' \
                   -s dev
 
+                # Install the Container Registry plug-in
+                ibmcloud plugin install container-registry -r Bluemix
+
                 # Log the local Docker client in to IBM Cloud Container Registry
                 ibmcloud cr login
 

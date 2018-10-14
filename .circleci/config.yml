@@ -14,22 +14,21 @@ jobs:
       - run:
           name: Build and push docker image
           command: |
-              # Install `ibmcloud` CLI and login
-              # curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
+              if [ "${CIRCLE_TAG}" ]; then
+                # Install `ibmcloud` CLI and login
+                # curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
 
-              # ibmcloud login \
-                # --apikey $CLOUD_API_KEY \
-                # -a https://api.ng.bluemix.net \
-                # -o carbon-design-system \
-                # -s production
+                # ibmcloud login \
+                  # --apikey $CLOUD_API_KEY \
+                  # -a https://api.ng.bluemix.net \
+                  # -o carbon-design-system \
+                  # -s production
 
-              # if [ ! "${CIRCLE_TAG}" ]; then
-                # docker build -t "registry.ng.bluemix.net/examples/nodejs-example:${CIRCLE_TAG}" .
-              # else
+                docker build -t "registry.ng.bluemix.net/examples/nodejs-example:${CIRCLE_TAG}" .
+                # docker push "registry.ng.bluemix.net/examples/nodejs-example:$CIRCLE_TAG"
+              else
                 docker build -t "registry.ng.bluemix.net/examples/nodejs-example:latest" .
-              # fi
-
-              # docker push "registry.ng.bluemix.net/examples/nodejs-example:$CIRCLE_TAG"
+              fi
 workflows:
   version: 2
   publish:

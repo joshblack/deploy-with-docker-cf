@@ -1,0 +1,38 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:8.12
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies in offline mode
+          command: yarn install --offline
+      - run:
+          name: Run ci checks
+          command: yarn ci-check
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build and push docker image
+          command: |
+              # Install `ibmcloud` CLI and login
+              # curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
+
+              # ibmcloud login \
+                # --apikey $CLOUD_API_KEY \
+                # -a https://api.ng.bluemix.net \
+                # -o carbon-design-system \
+                # -s production
+
+              docker build -t "registry.ng.bluemix.net/carbon/bot:$CIRCLE_TAG" .
+              # docker push "registry.ng.bluemix.net/carbon/bot:$CIRCLE_TAG"
+workflows:
+  version: 2
+  publish:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /^v.*/

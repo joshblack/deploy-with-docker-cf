@@ -1,0 +1,7 @@
+---
+applications:
+- name: deploy-with-docker-cf
+  memory: 128M
+  instances: 1
+  docker:
+    username: token

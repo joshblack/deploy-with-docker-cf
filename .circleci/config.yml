@@ -15,9 +15,10 @@ jobs:
           name: Build and push docker image
           command: |
               if [ "${CIRCLE_TAG}" != "" ]; then
+                DOCKER_IMAGE="registry.ng.bluemix.net/blog-examples/node:${CIRCLE_TAG}"
+
                 # Install `ibmcloud` CLI and login
                 curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
-
                 ibmcloud login \
                   --apikey $CLOUD_API_KEY \
                   -a https://api.ng.bluemix.net \
@@ -30,8 +31,10 @@ jobs:
                 # Log the local Docker client in to IBM Cloud Container Registry
                 ibmcloud cr login
 
-                docker build -t "registry.ng.bluemix.net/blog-examples/node:${CIRCLE_TAG}" .
-                docker push "registry.ng.bluemix.net/blog-examples/node:${CIRCLE_TAG}"
+                docker build -t $DOCKER_IMAGE .
+                docker push $DOCKER_IMAGE
+
+                ibmcloud cf push -o $DOCKER_IMAGE
               else
                 # Verify in CI that we can build our Dockerfile
                 docker build -t "registry.ng.bluemix.net/blog-examples/node:latest" .

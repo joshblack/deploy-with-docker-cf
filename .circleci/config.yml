@@ -24,10 +24,11 @@ jobs:
                   -o 'joshblack@us.ibm.com' \
                   -s dev
 
-                docker build -t "registry.ng.bluemix.net/examples/nodejs-example:${CIRCLE_TAG}" .
-                # docker push "registry.ng.bluemix.net/examples/nodejs-example:$CIRCLE_TAG"
+                docker build -t "registry.ng.bluemix.net/blog-examples/node:${CIRCLE_TAG}" .
+                docker push "registry.ng.bluemix.net/blog-examples/node:${CIRCLE_TAG}"
               else
-                docker build -t "registry.ng.bluemix.net/examples/nodejs-example:latest" .
+                # Verify in CI that we can build our Dockerfile
+                docker build -t "registry.ng.bluemix.net/blog-examples/node:latest" .
               fi
 workflows:
   version: 2

@@ -24,6 +24,9 @@ jobs:
                   -o 'joshblack@us.ibm.com' \
                   -s dev
 
+                # Log the local Docker client in to IBM Cloud Container Registry
+                ibmcloud cr login
+
                 docker build -t "registry.ng.bluemix.net/blog-examples/node:${CIRCLE_TAG}" .
                 docker push "registry.ng.bluemix.net/blog-examples/node:${CIRCLE_TAG}"
               else

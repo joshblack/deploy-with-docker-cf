@@ -9,9 +9,6 @@ jobs:
       - run:
           name: Install dependencies in offline mode
           command: yarn install --offline
-      - run:
-          name: Run ci checks
-          command: yarn ci-check
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
@@ -26,8 +23,13 @@ jobs:
                 # -o carbon-design-system \
                 # -s production
 
-              docker build -t "registry.ng.bluemix.net/carbon/bot:$CIRCLE_TAG" .
-              # docker push "registry.ng.bluemix.net/carbon/bot:$CIRCLE_TAG"
+              # if [ ! "${CIRCLE_TAG}" ]; then
+                # docker build -t "registry.ng.bluemix.net/examples/nodejs-example:${CIRCLE_TAG}" .
+              # else
+                docker build -t "registry.ng.bluemix.net/examples/nodejs-example:latest" .
+              # fi
+
+              # docker push "registry.ng.bluemix.net/examples/nodejs-example:$CIRCLE_TAG"
 workflows:
   version: 2
   publish:
